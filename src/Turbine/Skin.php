@@ -2,15 +2,13 @@
 
 declare(strict_types=1);
 
-namespace _64FF00\PurePerms;
+namespace Turbine\utils;
 
-use _64FF00\PurePerms\Transfer;
+use Turbine\Main;
 
 class Skin {
 
-  public $skins = [];
-
-  public function getSkinFromFile($filename){
+  public function getBytesFromFile($filename){
     $im = imagecreatefrompng($filename);
     list($width, $height) = getimagesize($filename);
     $bytes = '';
@@ -30,11 +28,12 @@ class Skin {
 
   public function getRandSkin(){
     $rand = rand(1, 25);
-  if(in_array($rand, $this->skins)){
+    $main = Main::getInstance();
+  if(in_array($rand, $main->skins)){
     return $this->getRandSkin();
   } else {
-    $this->skins[] = $rand;
-    return $this->getSkinFromFile('_64FF00/PurePerms/Skins' . $rand . '.png');
+    $main->skins[] = $rand;
+    return $this->getBytesFromFile($main->getDataFolder() . 'skins/' . $rand . '.png');
    }
   }
 }
