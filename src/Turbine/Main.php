@@ -14,6 +14,16 @@ use pocketmine\command\Command;
 //utils
 use pocketmine\utils\TextFormat as C;
 
+//nbt tags
+use pocketmine\nbt\tag\StringTag;
+use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\nbt\tag\DoubleTag;
+use pocketmine\nbt\tag\FloatTag;
+use pocketmine\nbt\tag\ListTag;
+
+//Entity
+use pocketmine\entity\Entity;
+
 class Main extends PluginBase implements Listener {
 
   public $skins = [];
@@ -25,42 +35,18 @@ class Main extends PluginBase implements Listener {
 
   public function onEnable(){
     self::$instance = $this;//allows you to get $this/Main from any file
-    @mkdir($this->getDataFolder());
     $this->getServer()->getPluginManager()->registerEvents($this, $this);
+    Entity::registerEntity(\Turbine\Npc::class, true);
+    $this->getServer()->getCommandMap()->register('addnpc', new \Turbine\Commands\addnpc($this));
     $this->getServer()->getLogger()->info(self::PREFIX . 'Plugin loaded!');
   }
 
   public static function getInstance(){
     return self::$instance;
   }
-
-  public function onCommand(CommandSender $sender, Command $command, string $label, array $args) : bool{
-  switch(strtolower($command->getName())){
-  case 'addnpc'://please for the love of god use single quotes XD
-  if($sender instanceof Player && $sender->isOp()){
-    $x = $sender->getX();
-    $y = $sender->getY();
-    $z = $sender->getZ();
-    $level = $sender->getLevel();
-    $pos = new \pocketmine\level\Position($x, $y, $z, $level);
-    $displayName = (string)$args[0];
-    $this->addNPC($pos, $displayName);
-			
-/*  $args[0] = $player;
-    $args[1] = $address;
-    $args[2] = $port;
-    $args[3] = $message;
-    This is old, I'll make it so like "on tap" stuff later lol
-    $player->transfer($address, $port, $message); */
-    return true;
-  } else {
-    $sender->sendMessage(C::RED .'You must be an op to issue this command!');
-    return false;
-    }
-   }
-  }
 	
   public function addNpc(\pocketmine\level\Position $pos, string $displayName) : void {
+    $this->getServer()->getLogger()->info(self::PREFIX ."Creating npc $displayName");
     $nbt = new CompoundTag;
     $nbt->Pos = new ListTag("Pos", [
       new DoubleTag("", $pos->x + 0.5),
@@ -82,6 +68,7 @@ class Main extends PluginBase implements Listener {
     $npc->setNameTag($displayName);
     $npc->spawnToAll();
     $this->entities['npc'][] = $npc;
+    $this->getServer()->getLogger()->info(self::PREFIX ."Created npc $displayName");
    }
   }
 }
