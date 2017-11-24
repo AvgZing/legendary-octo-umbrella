@@ -22,7 +22,8 @@ class Main extends PluginBase implements Listener {
   const PREFIX = C::GOLD . '[' . C::BLUE . 'Turbine In-Dev'. C::GOLD . '] '. C::RESET . C::WHITE;
 
   public function onEnable(){
-    self::$instance = $this;//allows you to get $this/Main from any file
+    self::$instance = $this;//allows you to get $this/Main from any file(if u plan to make a phar)
+    @mkdir($this->getDataFolder());
     $this->getServer()->getPluginManager()->registerEvents($this, $this);
     $this->getLogger()->info(self::PREFIX . 'Plugin loaded!');
   }
