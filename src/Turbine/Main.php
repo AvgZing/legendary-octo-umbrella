@@ -18,14 +18,16 @@ class Main extends PluginBase implements Listener {
 
   public $skins = [];
   public $entities = [];
- 
+
+  private static $instance = null;
+  
   const PREFIX = C::GOLD . '[' . C::BLUE . 'Turbine In-Dev'. C::GOLD . '] '. C::RESET . C::WHITE;
 
   public function onEnable(){
     self::$instance = $this;//allows you to get $this/Main from any file
     @mkdir($this->getDataFolder());
     $this->getServer()->getPluginManager()->registerEvents($this, $this);
-    $this->getLogger()->info(self::PREFIX . 'Plugin loaded!');
+    $this->getServer()->getLogger()->info(self::PREFIX . 'Plugin loaded!');
   }
 
   public static function getInstance(){
