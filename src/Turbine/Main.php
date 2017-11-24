@@ -52,8 +52,10 @@ class Main extends PluginBase implements Listener {
     $args[3] = $message;
     This is old, I'll make it so like "on tap" stuff later lol
     $player->transfer($address, $port, $message); */
+    return true;
   } else {
     $sender->sendMessage(C::RED .'You must be an op to issue this command!');
+    return false;
     }
    }
   }
