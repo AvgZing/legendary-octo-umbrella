@@ -1,5 +1,5 @@
-name: Turbime
-main: Turbime\Main
+name: Turbine
+main: Turbine\Main
 version: 1.4.0 # pls dont use a string here
 api: 3.0.0-ALPHA9 # no need for multiple api versions
 load: POSTWORLD
