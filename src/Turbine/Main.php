@@ -35,6 +35,7 @@ class Main extends PluginBase implements Listener {
 
   public function onEnable(){
     self::$instance = $this;//allows you to get $this/Main from any file
+    @mkdir($this->getDataFolder());
     $this->getServer()->getPluginManager()->registerEvents($this, $this);
     Entity::registerEntity(\Turbine\Npc::class, true);
     $this->getServer()->getCommandMap()->register('addnpc', new \Turbine\Commands\addnpc($this));
