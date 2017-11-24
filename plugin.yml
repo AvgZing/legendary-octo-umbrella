@@ -5,4 +5,4 @@ api: 3.0.0-ALPHA9 # no need for multiple api versions
 load: POSTWORLD
 commands:
   addnpc:
-  description: 'adds a npc'
+    description: "adds a npc"
