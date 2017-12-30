@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace _64FF00\PurePerms;
 
-use _64FF00\PurePerms\Transfer;
+use _64FF00\PurePerms\Main;
 
 class Skin {
 

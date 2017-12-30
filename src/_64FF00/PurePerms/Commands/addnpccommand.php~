@@ -1,0 +1,64 @@
+<?php 
+namespace _64FF00\PurePerms\Commands;
+use pocketmine\Player;
+use pocketmine\utils\TextFormat as C;
+use pocketmine\command\Command;
+use pocketmine\command\CommandSender;
+use pocketmine\command\defaults\VanillaCommand;
+class addnpcCommand extends VanillaCommand {
+    
+	private $plugin;
+	const PREFIX = C::GOLD . "[" . C::BLUE . "TransferIndev" . C::GOLD . "] ". C::RESET . C::WHITE;
+ 
+	public function __construct(\TheRoyalBlock\PluginName\Main $plugin){
+		$this->plugin = $plugin;
+		parent::__construct('addnpc', 'creates an npc', '/addnpc <name>');
+		$this->setPermission('plugins.command');
+	}
+	public function execute(CommandSender $sender, $alias, array $args){
+		if($sender instanceof Player){
+			if($sender->isOp() === true){
+				$x = $sender->getX();
+			$y = $sender->getY();
+			$z = $sender->getZ();
+			$pos = "$x, $y, $z";
+			$yaw = $sender->getYaw();
+			$pitch = $sender->getPitch();
+			$displayName = "$args[0]";
+			addNPC($pos, $yaw, $pitch, $displayName);
+			return true;
+			} else {
+				$sender->sendMessage(self::PREFIX . "You must be Op to run this Command!");
+			return false;
+			}
+		} else {
+			$sender->sendMessage(self::PREFIX . "Command must be run in-game!");
+		return false;     
+		}
+	}
+  public function addNpc(\pocketmine\level\Position $pos, $yaw, $pitch, string $displayName) : void {
+    $nbt = new CompoundTag;
+    $nbt->Pos = new ListTag("Pos", [
+      new DoubleTag("", $pos->x + 0.5),
+      new DoubleTag("", $pos->y),
+      new DoubleTag("", $pos->z + 0.5)
+    ]);
+    $nbt->Motion = new ListTag("Motion", [
+      new DoubleTag("", 0),
+      new DoubleTag("", 0),
+      new DoubleTag("", 0)
+    ]);
+    $nbt->Rotation = new ListTag("Rotation", [
+      new FloatTag("", intval($yaw)),
+      new FloatTag("", intval($pitch))
+    ]);
+    $nbt->Name = new StringTag("Name", $displayName);
+    $npc = Entity::createEntity("Npc", $pos->level, $nbt);
+  if($npc instanceof \Plexus\entity\Npc){
+    $npc->setNameTag($displayName);
+    $npc->setDefaultYawPitch($yaw, $pitch);
+    $npc->spawnToAll();
+    $this->getPlugin()->npc[] = $npc;
+   }
+  }
+}
